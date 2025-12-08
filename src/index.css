@@ -1,0 +1,250 @@
+/* src/index.css */
+
+/* --- ESTILOS GENERALES (Migrados de la etiqueta <style> del HTML) --- */
+:root {
+    --color-primary: #74C7E3;
+    --color-accent: #A7E9FF;
+    --color-bg: #CFF7FF;
+    --color-white: #FFFFFF;
+    --shadow: 0 4px 6px rgba(0,0,0,0.12);
+    --color-text: #1A2D42;
+}
+
+body {
+    background-color: var(--color-bg);
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    padding-top: 80px; /* Espacio para header fijo */
+    color: var(--color-text);
+}
+
+/* --- HEADER & NAV --- */
+.header {
+    background-color: rgba(167, 233, 255, 0.6);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px 40px;
+    box-shadow: var(--shadow);
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    backdrop-filter: blur(5px);
+}
+
+.header__logo {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem;
+    color: #1A2D42;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header-logo-img {
+    height: 45px;
+    width: auto;
+    margin: 0;
+}
+
+.header__actions {
+    display: flex;
+    gap: 20px;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    position: relative;
+    color: var(--color-text);
+    transition: color 0.3s;
+}
+
+.action-btn:hover { color: #3A80FF; }
+
+.badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    font-size: 0.7rem;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* --- SEARCH BAR --- */
+.search-container {
+    display: flex;
+    justify-content: center;
+    padding-top: 25px; 
+    background-color: transparent;
+}
+
+.search-input {
+    width: 90%;
+    max-width: 600px;
+    padding: 12px 20px;
+    border: 2px solid var(--color-primary);
+    border-radius: 30px;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: var(--color-white);
+    color: var(--color-text); 
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 8px var(--color-accent); 
+}
+
+/* --- FILTROS --- */
+.filters {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    padding: 20px 20px 30px; 
+}
+
+.filter-btn {
+    padding: 8px 20px;
+    border: 2px solid var(--color-primary);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--color-primary);
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.filter-btn--active, .filter-btn:hover {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+/* --- GRID DE PRODUCTOS --- */
+.catalogo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 50vh; 
+}
+
+/* Estilos Tarjeta (BEM) */
+.producto {
+    background-color: var(--color-white);
+    width: 280px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    color: var(--color-text);
+}
+
+.producto:hover { transform: translateY(-5px); }
+
+.producto__fav-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255,255,255,0.85);
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    color: var(--color-primary);
+    font-size: 1.2rem;
+    transition: all 0.3s;
+    z-index: 10;
+}
+
+.producto__fav-btn--active { color: #1A80A6; }
+
+.producto__imagen { width: 100%; height: 180px; object-fit: cover; }
+ 
+.producto__contenido { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+ 
+.producto__titulo { margin: 0 0 10px; font-family: 'Montserrat', sans-serif; font-size: 1.1rem; }
+ 
+.producto__precio { font-weight: bold; color: var(--color-primary); font-size: 1.1rem; margin-top: auto; }
+
+.producto__btn {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    border-radius: 8px;
+    margin-top: 15px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+.producto__btn:hover { background-color: var(--color-accent); color: var(--color-text); } 
+
+/* --- LOADING & EMPTY STATES --- */
+.loader { font-size: 1.5rem; color: var(--color-primary); font-weight: bold; display: flex; align-items: center; gap: 10px; }
+.hidden { display: none; }
+
+/* --- CART MODAL (Simple overlay) --- */
+.cart-modal {
+    position: fixed;
+    top: 0; right: 0;
+    width: 300px; 
+    height: 90vh; /* Cambié a 100vh para que cubra toda la altura */
+    background-color: #E4F8FF; 
+    box-shadow: -5px 0 20px rgba(0,0,0,0.2);
+    z-index: 200;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    color: var(--color-text)
+}
+
+.cart-modal--open { transform: translateX(0); }
+
+.cart-items { flex-grow: 1; overflow-y: auto; margin-top: 20px; }
+ 
+.cart-item { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid var(--color-accent); padding-bottom: 10px; }
+ 
+.cart-total { font-size: 1.5rem; font-weight: bold; text-align: right; margin-top: 20px; border-top: 2px solid var(--color-primary); padding-top: 10px; color: var(--color-primary); }
+
+/* --- TOAST NOTIFICATION --- */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    padding: 12px 24px;
+    border-radius: 50px;
+    opacity: 0;
+    transition: all 0.4s;
+    z-index: 300;
+    font-weight: bold;
+    box-shadow: var(--shadow);
+}
+.toast--visible { transform: translateX(-50%) translateY(0); opacity: 1; }

@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RobCissy Shop</title>
+    <!-- Fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- ESTILOS (Mantenemos BEM y añadimos utilidades para la APP) --- */
+        :root {
+            --color-primary: #74C7E3;
+            --color-accent: #A7E9FF;
+            --color-bg: #CFF7FF;
+            --color-white: #FFFFFF;
+            --shadow: 0 4px 6px rgba(0,0,0,0.12);
+			--color-text: #1A2D42; /*pendiente */
+        }
+
+        body {
+            background-color: var(--color-bg);
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding-top: 80px; /* Espacio para header fijo */
+			color: var(--color-text); /*pendiente */
+        }
+
+        /* --- HEADER & NAV --- */
+        .header {
+            background-color: rgba(167, 233, 255, 0.6);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 40px;
+            box-shadow: var(--shadow);
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+			backdrop-filter: blur(5px); /*agregado*/
+        }
+
+        .header__logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            color: #1A2D42;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header__actions {
+            display: flex;
+            gap: 20px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            position: relative;
+            color: var(--color-text);
+            transition: color 0.3s;
+        }
+
+        .action-btn:hover { color: #3A80FF; }
+
+        .badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            font-size: 0.7rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* --- SEARCH BAR (NUEVO) --- */
+        .search-container {
+            display: flex;
+            justify-content: center;
+            padding-top: 25px; /* se agrego top */
+            background-color: transparent;
+        }
+
+        .search-input {
+            width: 90%;
+            max-width: 600px;
+            padding: 12px 20px;
+            border: 2px solid var(--color-primary);
+            border-radius: 30px;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background-color: var(--color-white);
+			color: var(--color-text); /* se agrego color */
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 8px var(--color-accent); 
+        }
+
+        /* --- FILTROS (Tema 2: Interacción) --- */
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px 20px 30px; /* Ajuste de padding */
+        }
+
+        .filter-btn {
+            padding: 8px 20px;
+            border: 2px solid var(--color-primary);
+            border-radius: 20px;
+            background: transparent;
+            color: var(--color-primary);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .filter-btn--active, .filter-btn:hover {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        /* --- GRID DE PRODUCTOS --- */
+        .catalogo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 50vh; /* Para el loading */
+        }
+
+        /* Estilos Tarjeta (BEM) - Reutilizados */
+        .producto {
+            background-color: var(--color-white);
+            width: 280px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+			color: var(--color-text); /* se agrego */
+        }
+
+        .producto:hover { transform: translateY(-5px); }
+
+        .producto__fav-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.85);
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            color: var(--color-primary);
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+        .producto__fav-btn--active { color: #1A80A6; }
+
+        .producto__imagen { width: 100%; height: 180px; object-fit: cover; }
+        
+        .producto__contenido { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        
+        .producto__titulo { margin: 0 0 10px; font-family: 'Montserrat', sans-serif; font-size: 1.1rem; }
+        
+        .producto__precio { font-weight: bold; color: var(--color-primary); font-size: 1.1rem; margin-top: auto; }
+
+        .producto__btn {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            border: none;
+            border-radius: 8px;
+            margin-top: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .producto__btn:hover { background-color: var(--color-accent); color: var(--color-text); } /* se agrego color */
+
+        /* --- LOADING & EMPTY STATES --- */
+        .loader { font-size: 1.5rem; color: var(--color-primary); font-weight: bold; display: flex; align-items: center; gap: 10px; }
+        .hidden { display: none; }
+
+        /* --- CART MODAL (Simple overlay) --- */
+        .cart-modal {
+            position: fixed;
+            top: 0; right: 0;
+            width: 300px; /* Ancho reducido para mayor elegancia */
+            height: 90vh;
+            background-color: #E4F8FF; /*se agrego color */
+            box-shadow: -5px 0 20px rgba(0,0,0,0.2);
+            z-index: 200;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+			color: var(--color-text) /* pendiente */
+        }
+
+        .cart-modal--open { transform: translateX(0); }
+
+        .cart-items { flex-grow: 1; overflow-y: auto; margin-top: 20px; }
+        
+        .cart-item { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid var(--color-accent); padding-bottom: 10px; }
+        
+        .cart-total { font-size: 1.5rem; font-weight: bold; text-align: right; margin-top: 20px; border-top: 2px solid var(--color-primary); padding-top: 10px; color: var(--color-primary); }
+
+        /* --- TOAST NOTIFICATION --- */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            padding: 12px 24px;
+            border-radius: 50px;
+            opacity: 0;
+            transition: all 0.4s;
+            z-index: 300;
+			font-weight: bold; /* pendiente */
+			box-shadow: var(--shadow); /* pendiente */
+        }
+        .toast--visible { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    </style>
+
+                              <script>!function(e){var n="https://s.go-mpulse.net/boomerang/";if("False"=="True")e.BOOMR_config=e.BOOMR_config||{},e.BOOMR_config.PageParams=e.BOOMR_config.PageParams||{},e.BOOMR_config.PageParams.pci=!0,n="https://s2.go-mpulse.net/boomerang/";if(window.BOOMR_API_key="49VLA-CFTHA-CGTWE-8Y5XU-3FEH6",function(){function e(){if(!r){var e=document.createElement("script");e.id="boomr-scr-as",e.src=window.BOOMR.url,e.async=!0,o.appendChild(e),r=!0}}function t(e){r=!0;var n,t,a,i,d=document,O=window;if(window.BOOMR.snippetMethod=e?"if":"i",t=function(e,n){var t=d.createElement("script");t.id=n||"boomr-if-as",t.src=window.BOOMR.url,BOOMR_lstart=(new Date).getTime(),e=e||d.body,e.appendChild(t)},!window.addEventListener&&window.attachEvent&&navigator.userAgent.match(/MSIE [67]\./))return window.BOOMR.snippetMethod="s",void t(o,"boomr-async");a=document.createElement("IFRAME"),a.src="about:blank",a.title="",a.role="presentation",a.loading="eager",i=(a.frameElement||a).style,i.width=0,i.height=0,i.border=0,i.display="none",o.appendChild(a);try{O=a.contentWindow,d=O.document.open()}catch(_){n=document.domain,a.src="javascript:var d=document.open();d.domain='"+n+"';void 0;",O=a.contentWindow,d=O.document.open()}if(n)d._boomrl=function(){this.domain=n,t()},d.write("<bo"+"dy onload='document._boomrl();'>");else if(O._boomrl=function(){t()},O.addEventListener)O.addEventListener("load",O._boomrl,!1);else if(O.attachEvent)O.attachEvent("onload",O._boomrl);d.close()}function a(e){window.BOOMR_onload=e&&e.timeStamp||(new Date).getTime()}if(!window.BOOMR||!window.BOOMR.version&&!window.BOOMR.snippetExecuted){window.BOOMR=window.BOOMR||{},window.BOOMR.snippetStart=(new Date).getTime(),window.BOOMR.snippetExecuted=!0,window.BOOMR.snippetVersion=14,window.BOOMR.url=n+"49VLA-CFTHA-CGTWE-8Y5XU-3FEH6";var i=document.currentScript||document.getElementsByTagName("script")[0],o=i.parentNode,r=!1,d=document.createElement("link");if(d.relList&&"function"==typeof d.relList.supports&&d.relList.supports("preload")&&"as"in d)window.BOOMR.snippetMethod="p",d.href=window.BOOMR.url,d.rel="preload",d.as="script",d.addEventListener("load",e),d.addEventListener("error",function(){t(!0)}),setTimeout(function(){if(!r)t(!0)},3e3),BOOMR_lstart=(new Date).getTime(),o.appendChild(d);else t(!1);if(window.addEventListener)window.addEventListener("load",a,!1);else if(window.attachEvent)window.attachEvent("onload",a)}}(),"".length>0)if(e&&"performance"in e&&e.performance&&"function"==typeof e.performance.setResourceTimingBufferSize)e.performance.setResourceTimingBufferSize();!function(){if(BOOMR=e.BOOMR||{},BOOMR.plugins=BOOMR.plugins||{},!BOOMR.plugins.AK){var n=""=="true"?1:0,t="",a="fadaf4dfid32mjqacqopaaaaabutjfbx-f-78f3dcdbf-clienttons-s.akamaihd.net",i="false"=="true"?2:1,o={"ak.v":"39","ak.cp":"1726165","ak.ai":parseInt("1113999",10),"ak.ol":"0","ak.cr":13,"ak.ipv":6,"ak.proto":"h3","ak.rid":"4619dda1","ak.r":40178,"ak.a2":n,"ak.m":"dsca","ak.n":"essl","ak.bpcip":"2806:2f0:6540:f7a6::","ak.cport":54609,"ak.gh":"23.64.121.164","ak.quicv":"0x00000001","ak.tlsv":"tls1.3","ak.0rtt":"","ak.0rtt.ed":"","ak.csrc":"-","ak.acc":"","ak.t":"1765053495","ak.ak":"hOBiQwZUYzCg5VSAfCLimQ==s3M61StAbnlwI5XrGkoIGAvpivm3N5t3SCOPqT1tVi6d5RjlT8/NA5IcrgFEnbm0eMYRUFH4GFMDI2E6o8wjKrQs+nrgYjaI96xmOQoS7KD9/9IIRlxE8U6yt/KdPCyZC5T1GP95ihfdKbz3L91ro3AW2CiBRcWpTiXPasUS3JxY7wbunxp+71bgl340Cazt6urO0X2svQ7AyW6FYzKnT/1a+NXQwJG+oda5qpUzKU5I7u+4wFvbjEvVZ0qhJz02fEJSJXXY5xEcLSbXmSKLL1HTztEB/CdO0PwkqnN6LIm6o67COj6i+7ZMuumSQFuAWPK83Ry7kblboUOgBLfSCLMgsAnrJVFT0uy42bVx46LhhOnBoXD7SbVkIWJu9VpO+zjujfO1RCCGSbPJUcxUGzTxVJsMUC5nJrl325IYkCk=","ak.pv":"44","ak.dpoabenc":"","ak.tf":i};if(""!==t)o["ak.ruds"]=t;var r={i:!1,av:function(n){var t="http.initiator";if(n&&(!n[t]||"spa_hard"===n[t]))o["ak.feo"]=void 0!==e.aFeoApplied?1:0,BOOMR.addVar(o)},rv:function(){var e=["ak.bpcip","ak.cport","ak.cr","ak.csrc","ak.gh","ak.ipv","ak.m","ak.n","ak.ol","ak.proto","ak.quicv","ak.tlsv","ak.0rtt","ak.0rtt.ed","ak.r","ak.acc","ak.t","ak.tf"];BOOMR.removeVar(e)}};BOOMR.plugins.AK={akVars:o,akDNSPreFetchDomain:a,init:function(){if(!r.i){var e=BOOMR.subscribe;e("before_beacon",r.av,null,null),e("onbeacon",r.rv,null,null),r.i=!0}return this},is_complete:function(){return!0}}}}()}(window);</script></head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header__logo">
+            <i class="fas fa-mug-hot"></i> RobCissy Shop
+        </div>
+        <div class="header__actions">
+            <!-- Icono Favoritos (Usa Set en JS) -->
+            <button class="action-btn" id="btn-favs">
+                <i class="fas fa-heart"></i>
+                <span class="badge hidden" id="badge-fav">0</span>
+            </button>
+            <!-- Icono Carrito (Usa Map en JS) -->
+            <button class="action-btn" id="btn-cart">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="badge hidden" id="badge-cart">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Search Bar (NUEVO) -->
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Buscar Stickers one piece, Robins, Lucifer..." class="search-input">
+    </div>
+
+    <!-- FILTROS (Generados dinámicamente o estáticos) -->
+    <div class="filters">
+        <button class="filter-btn filter-btn--active" data-cat="all">Todos</button>
+        <button class="filter-btn" data-cat="DC">DC</button>
+        <button class="filter-btn" data-cat="One Piece">One Piece</button>
+        <button class="filter-btn" data-cat="Hazbin Hotel">Hazbin Hotel</button>
+		<button class="filter-btn" data-cat="Tales of Arcadia">Tales of Arcadia</button>
+    </div>
+
+    <!-- ÁREA PRINCIPAL -->
+    <main>
+        <!-- Loader (Async demo) -->
+        <div id="loader" class="catalogo">
+            <div class="loader"><i class="fas fa-spinner fa-spin"></i> Cargando productos...</div>
+        </div>
+
+        <!-- Catálogo Dinámico -->
+        <div id="catalogo" class="catalogo hidden">
+            <!-- JS inyectará aquí los productos -->
+        </div>
+    </main>
+
+    <!-- CARRITO SIDEBAR -->
+    <aside class="cart-modal" id="cart-modal">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>Tu Pedido</h2>
+            <button onclick="toggleCart()" style="background:none; border:none; font-size: 1.5rem; cursor:pointer;">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items-container">
+            <p style="color: #888; text-align: center; margin-top: 50px;">El carrito está vacío</p>
+        </div>
+        <div class="cart-total">
+            Total: <span id="cart-total-price">$0.00</span>
+        </div>
+        <!-- CAMBIO: Añadimos un ID al botón de finalizar compra -->
+        <button class="producto__btn" id="btn-checkout">Finalizar Compra</button>
+    </aside>
+
+    <!-- TOAST -->
+    <div id="toast" class="toast">Mensaje de notificación</div>
+
+    <!-- JAVASCRIPT: APLICACIÓN DE TEMAS 2 Y 3 -->
+    <script>
+        /**
+         * ==========================================
+         * TEMA 3: OBJETOS LITERALES Y DATOS
+         * ==========================================
+         * Definimos los datos crudos. En una app real vendrían de una BBDD.
+         * Usamos un array de objetos (Tema 2: Arrays, Tema 3: Objetos).
+         */
+        const rawData = [
+           { id: 1, name: "Red Hood gordo", price: 5, category: "DC", img: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400"},
+			{ id: 2, name: "Lucifer Pato", price: 5, category: "Hazbin Hotel", img: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=400"},
+			{ id: 3, name: "Lucifer Gato", price: 5, category: "Hazbin Hotel", img: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400"},
+			{ id: 4, name: "Sanji Pato", price: 5, category: "One Piece", img: "https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=400"},
+			{ id: 5, name: "Robins Stickers", price: 5, category: "DC", img: "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?w=400"},
+			{ id: 6, name: "Marco Fenix", price: 10, category: "One Piece", img: "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?w=400"},
+			{ id: 7, name: "Duxie", price: 5, category: "Tales of Arcadia", img: "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?w=400"},
+			{ id: 8, name: "Nightwing", price: 5, category: "DC", img: "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?w=400"},
+			{ id: 9, name: "Robins", price: 5, category: "DC", img: "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?w=400"},
+			{ id: 10, name: "Lucifer alegre", price: 5, category: "Hazbin Hotel", img: "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?w=400"},
+			{ id: 11, name: "Lucifer triste", price: 5, category: "Hazbin Hotel", img: "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?w=400"},
+			{ id: 12, name: "Lucifer tierno", price: 5, category: "Hazbin Hotel", img: "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?w=400"},
+			{ id: 13, name: "Mini FATSON", price: 5, category: "DC", img: "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?w=400"}
+        ];
+
+        /**
+         * ==========================================
+         * TEMA 2: ESTRUCTURAS DE DATOS AVANZADAS
+         * ==========================================
+         */
+        // MAP: Para el carrito. Clave: ID Producto, Valor: Cantidad.
+        const cart = new Map();
+
+        // SET: Para favoritos.
+        const wishlist = new Set();
+
+        /**
+         * ==========================================
+         * TEMA 3: CLOSURES (CLAUSURAS) / TEMA 4: DOM (TOAST)
+         * ==========================================
+         * Creamos una "fábrica de notificaciones".
+         */
+        const createNotifier = () => {
+            // TEMA 4: SELECCIÓN DE ELEMENTO. Obtenemos la referencia al Toast por su ID.
+            const toastEl = document.getElementById('toast');
+            let timeoutId;
+
+            return (message) => {
+                // TEMA 4: MANIPULACIÓN DE CONTENIDO. Cambiamos el texto del elemento.
+                toastEl.textContent = message;
+                
+                // TEMA 4: MANIPULACIÓN DE CLASES. Añadimos una clase para hacerlo visible (CSS Transition).
+                toastEl.classList.add('toast--visible');
+                
+                // Limpiamos timeout anterior si existe para evitar parpadeos
+                if (timeoutId) clearTimeout(timeoutId);
+
+                timeoutId = setTimeout(() => {
+                    // TEMA 4: MANIPULACIÓN DE CLASES. Quitamos la clase para ocultarlo.
+                    toastEl.classList.remove('toast--visible');
+                }, 3000);
+            };
+        };
+
+        const notify = createNotifier(); // Instancia del closure
+
+        /**
+         * ==========================================
+         * TEMA 3: ASINCRONÍA (PROMESAS Y ASYNC/AWAIT)
+         * ==========================================
+         */
+        const fetchProducts = () => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve(rawData);
+                }, 1500);
+            });
+        };
+
+        /**
+         * Función principal de inicialización
+         */
+        async function initApp() {
+            try {
+                const products = await fetchProducts();
+                
+                // TEMA 4: MANIPULACIÓN DE CLASES. Ocultamos el loader.
+                document.getElementById('loader').classList.add('hidden');
+                // TEMA 4: MANIPULACIÓN DE CLASES. Mostramos el catálogo.
+                document.getElementById('catalogo').classList.remove('hidden');
+
+                // Render inicial
+                renderCatalog(products);
+                setupFilters(products);
+                
+                // TEMA 4: MANEJO DE EVENTOS. Asignamos un evento de 'click' al botón de finalizar compra.
+                document.getElementById('btn-checkout').addEventListener('click', checkout);
+
+                // TEMA 4: MANEJO DE EVENTOS Y SELECCIÓN. Obtenemos la referencia al input de búsqueda.
+                const searchInput = document.getElementById('search-input');
+                // TEMA 4: MANEJO DE EVENTOS. Asignamos un evento 'input' para buscar en tiempo real.
+                searchInput.addEventListener('input', () => handleSearch(products));
+                
+            } catch (error) {
+                console.error("Error cargando productos:", error);
+                // TEMA 4: MANIPULACIÓN DE CONTENIDO. Mostramos un mensaje de error si la carga falla.
+                document.getElementById('loader').textContent = "Error cargando el catálogo.";
+            }
+        }
+
+        /**
+         * ==========================================
+         * Lógica de búsqueda (Buscadores)
+         * ==========================================
+         */
+        const handleSearch = (allProducts) => {
+            // TEMA 4: SELECCIÓN DE ELEMENTOS. Obtenemos el input y su valor.
+            const searchInput = document.getElementById('search-input');
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            
+            // TEMA 4: SELECCIÓN DE ELEMENTOS. Seleccionamos todos los botones de filtro.
+            const filterButtons = document.querySelectorAll('.filter-btn');
+
+            // Si hay un término de búsqueda, deseleccionar visualmente los filtros para evitar conflicto
+            if (searchTerm.length > 0) {
+                // TEMA 4: ITERACIÓN DEL DOM. Iteramos sobre los botones para remover la clase activa.
+                filterButtons.forEach(b => b.classList.remove('filter-btn--active'));
+                // Mantenemos 'Todos' lógicamente seleccionado si hay búsqueda.
+                document.querySelector('[data-cat="all"]').classList.add('filter-btn--active'); 
+            } else {
+                 // Si se borra la búsqueda, restauramos el filtro 'Todos' visualmente
+                 document.querySelector('[data-cat="all"]').classList.add('filter-btn--active'); 
+            }
+
+            const filtered = allProducts.filter(p => 
+                p.name.toLowerCase().includes(searchTerm)
+            );
+
+            renderCatalog(filtered);
+        };
+
+
+        /**
+         * ==========================================
+         * TEMA 3: FUNCIONES FLECHA Y DE ORDEN SUPERIOR / TEMA 4: DOM (RENDER)
+         * ==========================================
+         * Renderiza el catálogo transformando datos en HTML.
+         */
+        const renderCatalog = (productsList) => {
+            // TEMA 4: SELECCIÓN DE ELEMENTO. Obtenemos el contenedor donde se inyectará el HTML.
+            const container = document.getElementById('catalogo');
+            
+            // Usamos .map() para generar un array de strings HTML
+            const cardsHtml = productsList.map(product => {
+                const isFav = wishlist.has(product.id);
+                
+                // TEMA 4: CREACIÓN DINÁMICA DE HTML (Template Literals)
+                // Se construye el HTML de cada tarjeta de producto.
+                return `
+                    <article class="producto">
+                        <!-- TEMA 4: MANEJO DE EVENTOS INLINE. Las funciones (toggleWishlist, addToCart)
+                             están disponibles globalmente y reciben el ID del producto. -->
+                        <button class="producto__fav-btn ${isFav ? 'producto__fav-btn--active' : ''}" 
+                                onclick="toggleWishlist(${product.id})">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                        <img src="${product.img}" alt="${product.name}" class="producto__imagen">
+                        <div class="producto__contenido">
+                            <h3 class="producto__titulo">${product.name}</h3>
+                            <div class="producto__precio">$${product.price.toFixed(2)}</div>
+                            <button class="producto__btn" onclick="addToCart(${product.id})">
+                                Añadir al Carrito
+                            </button>
+                        </div>
+                    </article>
+                `;
+            }).join(''); // Unimos el array de strings en un único string HTML.
+
+            // TEMA 4: INYECCIÓN DE HTML. Usamos innerHTML para reemplazar el contenido del contenedor.
+            container.innerHTML = cardsHtml;
+        };
+
+        /**
+         * Configuración de Filtros
+         */
+        const setupFilters = (allProducts) => {
+            // TEMA 4: SELECCIÓN DE ELEMENTOS. Obtenemos todos los botones con la clase 'filter-btn'.
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            // TEMA 4: ITERACIÓN DEL DOM. Recorremos los botones para asignar el evento.
+            buttons.forEach(btn => {
+                // TEMA 4: MANEJO DE EVENTOS. Asignamos un 'click' listener a cada botón.
+                btn.addEventListener('click', (e) => {
+                    // 1. Limpiar el campo de búsqueda al aplicar un filtro
+                    // TEMA 4: MANIPULACIÓN DE VALOR. Accedemos al valor del input de búsqueda.
+                    document.getElementById('search-input').value = '';
+
+                    // 2. Gestión de clases visuales
+                    // TEMA 4: MANIPULACIÓN DE CLASES. Quitamos la clase activa a todos.
+                    buttons.forEach(b => b.classList.remove('filter-btn--active'));
+                    // TEMA 4: MANIPULACIÓN DE CLASES. Añadimos la clase activa al botón que fue clickeado.
+                    e.target.classList.add('filter-btn--active');
+
+                    // TEMA 4: ACCESO A DATA ATTRIBUTES. Leemos el atributo 'data-cat' del elemento clickeado.
+                    const category = e.target.dataset.cat; 
+
+                    const filtered = category === 'all' 
+                        ? allProducts 
+                        : allProducts.filter(p => p.category === category);
+
+                    renderCatalog(filtered);
+                });
+            });
+        };
+
+        /**
+         * Lógica del Carrito (Uso de MAP)
+         */
+        const addToCart = (id) => {
+            if (cart.has(id)) {
+                cart.set(id, cart.get(id) + 1);
+            } else {
+                cart.set(id, 1);
+            }
+            updateCartUI();
+            notify("Producto añadido al carrito");
+        };
+
+        const removeFromCart = (id) => {
+            cart.delete(id); 
+            updateCartUI();
+        };
+
+        const checkout = () => {
+            if (cart.size === 0) {
+                notify("¡Tu carrito está vacío!");
+                return;
+            }
+
+            // Simulación de proceso de compra
+            notify("¡Gracias por tu pedido! La compra ha sido finalizada con éxito.");
+            
+            cart.clear();
+            
+            updateCartUI();
+            toggleCart(); 
+        };
+
+        /**
+         * TEMA 4: DOM (Actualización de Carrito y Badges)
+         */
+        const updateCartUI = () => {
+            // TEMA 4: SELECCIÓN DE ELEMENTOS. Obtenemos referencias a contenedores y contadores.
+            const container = document.getElementById('cart-items-container');
+            const badge = document.getElementById('badge-cart');
+            const totalEl = document.getElementById('cart-total-price');
+
+            let totalItems = 0;
+            let totalPrice = 0;
+
+            if (cart.size === 0) {
+                // TEMA 4: MANIPULACIÓN DE CONTENIDO. Se inyecta el mensaje de carrito vacío.
+                container.innerHTML = '<p style="color: #888; text-align: center; margin-top: 50px;">El carrito está vacío</p>';
+                // TEMA 4: MANIPULACIÓN DE CLASES. Ocultamos el badge si está vacío.
+                badge.classList.add('hidden');
+            } else {
+                let html = '';
+                // Iteramos sobre las entradas del Map para construir el HTML del carrito
+                for (const [id, qty] of cart) {
+                    const product = rawData.find(p => p.id === id);
+                    totalItems += qty;
+                    totalPrice += (product.price * qty);
+
+                    html += `
+                        <div class="cart-item">
+                            <div>
+                                <strong>${product.name}</strong><br>
+                                <small>${qty} x $${product.price.toFixed(2)}</small>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <span style="font-weight:bold;">$${(product.price * qty).toFixed(2)}</span>
+                                <!-- TEMA 4: MANEJO DE EVENTOS INLINE -->
+                                <button onclick="removeFromCart(${id})" style="color:red; border:none; background:none; cursor:pointer;">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+                // TEMA 4: INYECCIÓN DE HTML. Remplazamos el contenido del carrito.
+                container.innerHTML = html;
+                
+                // TEMA 4: MANIPULACIÓN DE CONTENIDO. Actualizamos el número del badge.
+                badge.textContent = totalItems;
+                // TEMA 4: MANIPULACIÓN DE CLASES. Mostramos el badge.
+                badge.classList.remove('hidden');
+            }
+
+            // TEMA 4: MANIPULACIÓN DE CONTENIDO. Actualizamos el total a pagar.
+            totalEl.textContent =  '$' + totalPrice.toFixed(2) ;
+        };
+
+        /**
+         * Lógica de Favoritos (Uso de SET)
+         */
+        const toggleWishlist = (id) => {
+            if (wishlist.has(id)) {
+                wishlist.delete(id);
+                notify("Eliminado de favoritos");
+            } else {
+                wishlist.add(id);
+                notify("Añadido a favoritos");
+            }
+            
+            // TEMA 4: SELECCIÓN DE ELEMENTO. Referencia al badge de favoritos.
+            const badge = document.getElementById('badge-fav');
+            
+            // TEMA 4: MANIPULACIÓN DE CONTENIDO y CLASES. Actualizamos el estado del badge.
+            badge.textContent = wishlist.size; 
+            if (wishlist.size > 0) badge.classList.remove('hidden');
+            else badge.classList.add('hidden');
+
+            // Re-renderizar para actualizar el icono del corazón de la tarjeta
+            const searchInput = document.getElementById('search-input');
+            const searchTerm = searchInput.value.toLowerCase().trim();
+
+            if (searchTerm) {
+                handleSearch(rawData);
+            } else {
+                // TEMA 4: SELECCIÓN DE ELEMENTO. Buscamos el botón activo para mantener el filtro.
+                const activeBtn = document.querySelector('.filter-btn--active');
+                const category = activeBtn ? activeBtn.dataset.cat : 'all'; 
+                const filtered = category === 'all' ? rawData : rawData.filter(p => p.category === category);
+                renderCatalog(filtered);
+            }
+        };
+
+        // UI Helpers
+        const toggleCart = () => {
+            // TEMA 4: SELECCIÓN DE ELEMENTO. Referencia al modal.
+            const cartModal = document.getElementById('cart-modal');
+            // TEMA 4: MANIPULACIÓN DE CLASES. Alternamos la clase para abrir/cerrar el modal (CSS).
+            cartModal.classList.toggle('cart-modal--open');
+        };
+
+        // TEMA 4: MANEJO DE EVENTOS. Asignamos el evento al botón del carrito.
+        document.getElementById('btn-cart').addEventListener('click', toggleCart);
+
+        // Arranque de la aplicación
+        initApp();
+
+    </script>
+</body>
+</html>
