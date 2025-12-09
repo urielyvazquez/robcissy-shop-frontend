@@ -1,46 +1,42 @@
 // src/componentes/Header.jsx
 import React from 'react';
+import { Link } from 'react-router-dom'; 
 
-// Recibe las props definidas en App.jsx
 const Header = ({ cartCount, favCount, toggleCart }) => {
     return (
-        // Utilizamos 'className' en lugar de 'class'
         <header className="header">
-            {/* Logo de la tienda */}
-            <div className="header__logo">
+            {/* 1. Logo: Ir al Catálogo */}
+            <Link to="/" className="header__logo"> {/* Usar Link para navegar al HOME (/) */}
                 <img
                     src="/Imagenes/Logo.png"
                     alt="Logo RobCissy Shop"
                     className="header-logo-img" 
                 />
-
                 RobCissy Shop
-            </div>
+            </Link>
             
             <div className="header__actions">
-                {/* 1. Botón de Favoritos (Wishlist) */}
-                <button 
+                {/* 2. Botón de Favoritos (Wishlist): Dirige a /favoritos */}
+                <Link 
+                    to="/favoritos" // Usar Link para navegar a la ruta /favoritos
                     className="action-btn" 
                     id="btn-favs"
-                    // En React, no usamos el 'onclick' global; simplemente es 'onClick'
                 >
                     <i className="fas fa-heart"></i>
-                    {/* El badge se muestra condicionalmente si hay favoritos (favCount > 0) */}
                     {favCount > 0 && (
                         <span className="badge" id="badge-fav">
                             {favCount}
                         </span>
                     )}
-                </button>
+                </Link>
                 
-                {/* 2. Botón de Carrito */}
+                {/* 3. Botón de Carrito (Sigue siendo un botón que abre el Modal) */}
                 <button 
                     className="action-btn" 
                     id="btn-cart"
-                    onClick={toggleCart} // Llama a la prop 'toggleCart' para abrir el modal
+                    onClick={toggleCart} 
                 >
                     <i className="fas fa-shopping-cart"></i>
-                    {/* El badge se muestra condicionalmente si hay ítems en el carrito (cartCount > 0) */}
                     {cartCount > 0 && (
                         <span className="badge" id="badge-cart">
                             {cartCount}

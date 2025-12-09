@@ -1,6 +1,6 @@
 /* src/index.css */
 
-/* --- ESTILOS GENERALES (Migrados de la etiqueta <style> del HTML) --- */
+/* --- ESTILOS GENERALES --- */
 :root {
     --color-primary: #74C7E3;
     --color-accent: #A7E9FF;
@@ -134,7 +134,7 @@ body {
     color: var(--color-white);
 }
 
-/* --- GRID DE PRODUCTOS --- */
+/* --- Catalogo DE PRODUCTOS --- */
 .catalogo {
     display: flex;
     flex-wrap: wrap;
@@ -146,7 +146,7 @@ body {
     min-height: 50vh; 
 }
 
-/* Estilos Tarjeta (BEM) */
+/* Estilos Tarjeta */
 .producto {
     background-color: var(--color-white);
     width: 280px;
@@ -202,6 +202,40 @@ body {
 }
 .producto__btn:hover { background-color: var(--color-accent); color: var(--color-text); } 
 
+/* Responsive para móviles */
+@media (max-width: 768px) {
+  .detail__grid {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .detail__image {
+    max-width: 100%;
+  }
+
+  .detail__content {
+    width: 100%;
+  }
+}
+
+/* ---Bottom Details --- */
+.producto__actions {
+    display: flex;
+    flex-direction: column; /* Apila los botones (carrito arriba, detalles abajo) */
+    gap: 0px; /* Espacio vertical entre los botones */
+    padding: 10px; 
+}
+
+.producto__actions a, 
+.producto__actions button {
+    display: block; /* Ocupa la línea completa */
+    width: 100%; /* Ocupa el ancho completo del contenedor (mismo tamaño) */
+    box-sizing: border-box;
+    height: 40px; 
+    line-height: 40px; 
+    text-align: center;
+}
+
 /* --- LOADING & EMPTY STATES --- */
 .loader { font-size: 1.5rem; color: var(--color-primary); font-weight: bold; display: flex; align-items: center; gap: 10px; }
 .hidden { display: none; }
@@ -211,7 +245,7 @@ body {
     position: fixed;
     top: 0; right: 0;
     width: 300px; 
-    height: 90vh; /* Cambié a 100vh para que cubra toda la altura */
+    height: 90vh; 
     background-color: #E4F8FF; 
     box-shadow: -5px 0 20px rgba(0,0,0,0.2);
     z-index: 200;

@@ -1,39 +1,27 @@
 // src/componentes/CartModal.jsx
-
 import React from 'react';
 
-// Recibe todas las props necesarias desde App.jsx
 const CartModal = ({ isOpen, toggleCart, cart, removeFromCart, checkout, allProducts }) => {
 
-    // === 1. Lógica para obtener la lista detallada de ítems (Paso 1) ===
-    // Ya no usamos 'let totalPrice = 0;' aquí.
-    
-    // Mapeamos los IDs y cantidades del carrito (cart) a la información completa del producto (allProducts)
     const cartItemsDetails = cart.map(item => {
         const product = allProducts.find(p => p.id === item.id);
         
-        // Manejo de caso si el producto no existe (debería existir si la lógica de App.jsx es correcta)
         const itemTotal = product ? product.price * item.qty : 0; 
         
         return {
-            // Incluimos todos los detalles del producto y la cantidad/total calculado
             ...product, 
             qty: item.qty,
             itemTotal: itemTotal,
-            id: item.id // Necesitamos el ID original del carrito
+            id: item.id 
         };
-    }).filter(item => item.name); // Filtramos ítems sin nombre (productos no encontrados)
+    }).filter(item => item.name); 
 
-    // === 2. Lógica para calcular el Total (Paso 2: Usando Reduce) ===
-    // Calculamos el precio total a partir de la lista de ítems detallados
     const totalPrice = cartItemsDetails.reduce((sum, item) => sum + item.itemTotal, 0);
 
-    // Clase CSS condicional para abrir/cerrar el modal
     const modalClass = `cart-modal ${isOpen ? 'cart-modal--open' : ''}`;
 
     return (
         <aside className={modalClass} id="cart-modal">
-            {/* ... (Resto del componente JSX sin cambios) ... */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h2>Tu Pedido</h2>
                 <button 

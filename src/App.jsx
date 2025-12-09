@@ -1,13 +1,13 @@
 // src/App.jsx
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react'; 
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // === 1. Importaciones ===
 
-// RUTA CORREGIDA: Apunta a "data.jsx" en el mismo directorio (src/)
 import { rawData as initialProducts } from "./Data/products.jsx";
 
-// Componentes (Se asume que están en ./componentes)
+// Componentes
 import Header from './componentes/Header.jsx';
 import SearchBar from './componentes/Searchbar.jsx';
 import Filters from './componentes/Filters.jsx';
@@ -15,62 +15,77 @@ import Catalog from './componentes/Catalog.jsx';
 import CartModal from './componentes/CartModal.jsx';
 import Toast from './componentes/Toast.jsx';
 
+// Importación de los nuevos componentes de RUTA
+import ProductDetail from './componentes/ProductDetail.jsx';
+import WishlistPage from './componentes/WishlistPage.jsx'; 
+import ScrollTopButton from "./componentes/ScrollTopButton";
+
+import useWishlist from './Hooks/useWishlist.js'; 
+
 
 // =========================================================
 function App() {
     
-    // === 2. ESTADO CENTRAL ===
-    
-    // Lista de productos actualmente visibles (para el catálogo)
+    // Lista de productos actualmente visibles (para el catálogo filtrado)
     const [products, setProducts] = useState([]); 
     
     // Carrito: Array de objetos { id: 1, qty: 2 }
     const [cart, setCart] = useState([]); 
 
-    // Favoritos: Set de IDs de productos
-    const [wishlist, setWishlist] = useState(new Set()); 
-
     // Estado para la UI: Modal y Toast
     const [isCartOpen, setIsCartOpen] = useState(false);
-    const [toastMessage, setToastMessage] = useState(null);
+    const [toastMessage, setToastMessage] = useState(null); 
+    
+    
+    // === 2. UI Helpers (Toast y Carrito Modal) ===
+    
+    const showToast = useCallback((message) => { 
+        setToastMessage(message);
+        setTimeout(() => {
+            setToastMessage(null);
+        }, 3000);
+    }, []); 
+    
 
-    // === 3. EFECTO DE MONTAJE (Carga de Datos Inicial) ===
+    // === 3. LLAMADA AL CUSTOM HOOK ===
+    const { wishlist, toggleWishlist, isFavorite } = useWishlist(showToast); 
+    
+    
+    // === 4. EFECTO DE MONTAJE ===
     
     useEffect(() => {
-        // Simulación de carga (Loader)
+        // Simulación de carga de datos 
         const fetchProducts = new Promise((resolve) => {
             setTimeout(() => {
                 resolve(initialProducts);
-            }, 1500);
+            }, 500); 
         });
 
         fetchProducts.then(data => {
-            // Actualizamos el estado con los datos cargados
-            setProducts(data);
+            setProducts(data); // Inicializa el catálogo visible
         });
     }, []); 
 
-    // === 4. LÓGICA DEL CARRITO ===
+    // === 5. LÓGICA DEL CARRITO ===
+    
+    const addToCart = useCallback((product) => { 
+        const id = product.id;
 
-    const addToCart = (id) => {
         setCart(prevCart => {
             const existingItem = prevCart.find(item => item.id === id);
 
             if (existingItem) {
-                // Si existe, aumenta la cantidad
                 return prevCart.map(item =>
                     item.id === id ? { ...item, qty: item.qty + 1 } : item
                 );
             } else {
-                // Si no existe, lo añade
                 return [...prevCart, { id: id, qty: 1 }];
             }
         });
-        showToast('Producto añadido al carrito');
-    };
+        showToast(`"${product.name}" añadido al carrito`);
+    }, [showToast]); 
 
     const removeFromCart = (id) => {
-        // Elimina el ítem completo del carrito
         setCart(prevCart => prevCart.filter(item => item.id !== id));
         showToast('Producto eliminado del carrito');
     };
@@ -81,44 +96,15 @@ function App() {
             return;
         }
         showToast('¡Gracias por tu pedido! Compra finalizada.');
-        setCart([]); // Vacía el carrito
-        setIsCartOpen(false); // Cierra el modal
+        setCart([]); 
+        setIsCartOpen(false); 
     };
-
-    // === 5. LÓGICA DE FAVORITOS ===
-
-    const toggleWishlist = (id) => {
-        setWishlist(prevWishlist => {
-            const newWishlist = new Set(prevWishlist); 
-            let message = '';
-
-            if (newWishlist.has(id)) {
-                newWishlist.delete(id);
-                message = 'Eliminado de favoritos';
-            } else {
-                newWishlist.add(id);
-                message = 'Añadido a favoritos';
-            }
-            showToast(message);
-            return newWishlist; 
-        });
-    };
-
-    // === 6. UI Helpers (Toast y Carrito Modal) ===
 
     const toggleCart = () => {
         setIsCartOpen(prev => !prev);
     };
-
-    const showToast = (message) => {
-        setToastMessage(message);
-        // Oculta el toast después de 3 segundos
-        setTimeout(() => {
-            setToastMessage(null);
-        }, 3000);
-    };
     
-    // === 7. LÓGICA DE FILTROS Y BÚSQUEDA ===
+    // === 6. LÓGICA DE FILTROS Y BÚSQUEDA ===
 
     const handleSearch = (searchTerm) => {
         const term = searchTerm.toLowerCase().trim();
@@ -134,34 +120,16 @@ function App() {
     };
 
 
-    // === 8. RENDERIZADO PRINCIPAL ===
+    // === 7. RENDERIZADO PRINCIPAL ===
     
     return (
-        <>
-            {/* Header */}
+        <BrowserRouter> 
             <Header 
                 cartCount={cart.length} 
-                favCount={wishlist.size} 
+                favCount={wishlist.size} // <- Del Custom Hook
                 toggleCart={toggleCart} 
             />
 
-            {/* Búsqueda */}
-            <SearchBar onSearch={handleSearch} />
-
-            {/* Filtros */}
-            <Filters onFilter={handleFilter} />
-
-            <main>
-                {/* Catálogo */}
-                <Catalog 
-                    products={products} 
-                    toggleWishlist={toggleWishlist} 
-                    addToCart={addToCart} 
-                    wishlist={wishlist}
-                />
-            </main>
-
-            {/* Modal del Carrito */}
             <CartModal 
                 isOpen={isCartOpen} 
                 toggleCart={toggleCart}
@@ -171,9 +139,62 @@ function App() {
                 allProducts={initialProducts} 
             />
 
-            {/* Notificación Toast */}
             <Toast message={toastMessage} />
-        </>
+
+
+            <main>
+                <Routes> 
+                    
+                    {/* RUTA 1: Catálogo principal (Home: /) */}
+                    <Route 
+                        path="/" 
+                        element={
+                            <>
+                                <SearchBar onSearch={handleSearch} />
+                                <Filters onFilter={handleFilter} />
+                                <Catalog 
+                                    products={products} 
+                                    toggleWishlist={toggleWishlist} // <- Del Custom Hook
+                                    addToCart={addToCart} 
+                                    isFavorite={isFavorite} // <- Del Custom Hook
+                                />
+                            </>
+                        } 
+                    />
+
+                    {/* RUTA 2: Página de Favoritos (/favoritos) */}
+                    <Route 
+                        path="/favoritos" 
+                        element={<WishlistPage 
+                            products={initialProducts} // ✅ CORREGIDO: Usamos initialProducts
+                            wishlist={wishlist} // <- Del Custom Hook
+                            toggleWishlist={toggleWishlist} // <- Del Custom Hook
+                            isFavorite={isFavorite} // <- Del Custom Hook
+                            onAddToCart={addToCart} 
+                        />} 
+                    />
+                    
+                    {/* RUTA 3: Detalle de Producto (/producto/:productId) */}
+                    <Route 
+                        path="/producto/:productId" 
+                        element={<ProductDetail 
+                            products={initialProducts}
+                            addToCart={addToCart}
+                            toggleWishlist={toggleWishlist} // <- Del Custom Hook
+                            isFavorite={isFavorite} // ✅ CORREGIDO: Usamos isFavorite
+                        />} 
+                    />
+
+                    {/* RUTA 4: Error 404 (Wildcard *) */}
+                    <Route path="*" element={<div style={{padding: '2rem'}}><h1>404 | Página No Encontrada</h1><p>La URL que buscaste no existe.</p></div>} />
+                    
+                </Routes>
+            </main>
+            
+            {/* Scroll Buttom */}
+            <ScrollTopButton/>
+        </BrowserRouter>
+
     );
 }
 

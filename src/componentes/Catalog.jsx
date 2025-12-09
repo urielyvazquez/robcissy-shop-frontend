@@ -1,12 +1,11 @@
 // src/componentes/Catalog.jsx
-import React from 'react';
-import ProductCard from './ProductCard.jsx'; // Importamos el componente de tarjeta
 
-// Recibe la lista de productos y las funciones de manejo del estado global
-const Catalog = ({ products, toggleWishlist, addToCart, wishlist }) => {
+import React from 'react';
+import ProductCard from './ProductCard.jsx'; 
+
+// 🚨 CORRECCIÓN: Recibe 'isFavorite' en lugar de 'wishlist'
+const Catalog = ({ products, toggleWishlist, addToCart, isFavorite }) => {
     
-    // Si el array de productos está vacío, mostramos el loader.
-    // (En App.jsx ya manejamos que 'products' sea un array vacío al inicio)
     if (products.length === 0) {
         return (
             <div id="loader" className="catalogo">
@@ -18,17 +17,15 @@ const Catalog = ({ products, toggleWishlist, addToCart, wishlist }) => {
     }
 
     return (
-        // Utilizamos la clase 'catalogo'
         <div id="catalogo" className="catalogo">
-            {/* Iteramos sobre el array de productos y creamos una ProductCard por cada uno */}
             {products.map(product => (
                 <ProductCard
                     key={product.id}
-                    product={product} // Le pasamos el objeto completo del producto
-                    // Le pasamos las funciones y el estado del wishlist a cada tarjeta
+                    product={product} 
                     onToggleWishlist={toggleWishlist} 
                     onAddToCart={addToCart} 
-                    isFav={wishlist.has(product.id)}
+                    // 🚨 CORRECCIÓN: Llama a la función 'isFavorite'
+                    isFav={isFavorite(product.id)}
                 />
             ))}
         </div>

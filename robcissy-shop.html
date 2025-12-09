@@ -264,12 +264,10 @@
             <i class="fas fa-mug-hot"></i> RobCissy Shop
         </div>
         <div class="header__actions">
-            <!-- Icono Favoritos (Usa Set en JS) -->
             <button class="action-btn" id="btn-favs">
                 <i class="fas fa-heart"></i>
                 <span class="badge hidden" id="badge-fav">0</span>
             </button>
-            <!-- Icono Carrito (Usa Map en JS) -->
             <button class="action-btn" id="btn-cart">
                 <i class="fas fa-shopping-cart"></i>
                 <span class="badge hidden" id="badge-cart">0</span>
@@ -277,12 +275,12 @@
         </div>
     </header>
 
-    <!-- Search Bar (NUEVO) -->
+    <!-- Search Bar -->
     <div class="search-container">
         <input type="text" id="search-input" placeholder="Buscar Stickers one piece, Robins, Lucifer..." class="search-input">
     </div>
 
-    <!-- FILTROS (Generados dinámicamente o estáticos) -->
+    <!-- FILTROS -->
     <div class="filters">
         <button class="filter-btn filter-btn--active" data-cat="all">Todos</button>
         <button class="filter-btn" data-cat="DC">DC</button>
@@ -293,18 +291,18 @@
 
     <!-- ÁREA PRINCIPAL -->
     <main>
-        <!-- Loader (Async demo) -->
+        <!-- Loader -->
         <div id="loader" class="catalogo">
             <div class="loader"><i class="fas fa-spinner fa-spin"></i> Cargando productos...</div>
         </div>
 
-        <!-- Catálogo Dinámico -->
+        <!-- Catalogo -->
         <div id="catalogo" class="catalogo hidden">
             <!-- JS inyectará aquí los productos -->
         </div>
     </main>
 
-    <!-- CARRITO SIDEBAR -->
+    <!-- CARRITO -->
     <aside class="cart-modal" id="cart-modal">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <h2>Tu Pedido</h2>
@@ -316,84 +314,54 @@
         <div class="cart-total">
             Total: <span id="cart-total-price">$0.00</span>
         </div>
-        <!-- CAMBIO: Añadimos un ID al botón de finalizar compra -->
         <button class="producto__btn" id="btn-checkout">Finalizar Compra</button>
     </aside>
 
     <!-- TOAST -->
     <div id="toast" class="toast">Mensaje de notificación</div>
 
-    <!-- JAVASCRIPT: APLICACIÓN DE TEMAS 2 Y 3 -->
+    <!-- JAVASCRIPT-->
     <script>
-        /**
-         * ==========================================
-         * TEMA 3: OBJETOS LITERALES Y DATOS
-         * ==========================================
-         * Definimos los datos crudos. En una app real vendrían de una BBDD.
-         * Usamos un array de objetos (Tema 2: Arrays, Tema 3: Objetos).
-         */
+	
         const rawData = [
-           { id: 1, name: "Red Hood gordo", price: 5, category: "DC", img: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400"},
-			{ id: 2, name: "Lucifer Pato", price: 5, category: "Hazbin Hotel", img: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=400"},
-			{ id: 3, name: "Lucifer Gato", price: 5, category: "Hazbin Hotel", img: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400"},
-			{ id: 4, name: "Sanji Pato", price: 5, category: "One Piece", img: "https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=400"},
-			{ id: 5, name: "Robins Stickers", price: 5, category: "DC", img: "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?w=400"},
-			{ id: 6, name: "Marco Fenix", price: 10, category: "One Piece", img: "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?w=400"},
-			{ id: 7, name: "Duxie", price: 5, category: "Tales of Arcadia", img: "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?w=400"},
-			{ id: 8, name: "Nightwing", price: 5, category: "DC", img: "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?w=400"},
-			{ id: 9, name: "Robins", price: 5, category: "DC", img: "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?w=400"},
-			{ id: 10, name: "Lucifer alegre", price: 5, category: "Hazbin Hotel", img: "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?w=400"},
-			{ id: 11, name: "Lucifer triste", price: 5, category: "Hazbin Hotel", img: "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?w=400"},
-			{ id: 12, name: "Lucifer tierno", price: 5, category: "Hazbin Hotel", img: "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?w=400"},
-			{ id: 13, name: "Mini FATSON", price: 5, category: "DC", img: "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?w=400"}
+           { id: 1, name: "Red Hood gordo", price: 5, category: "DC", img: "/*Poner imagen CORESPONDIENTE*/"},
+			{ id: 2, name: "Lucifer Pato", price: 5, category: "Hazbin Hotel", img: "/*Poner imagen CORESPONDIENTE*/"},
+			{ id: 3, name: "Lucifer Gato", price: 5, category: "Hazbin Hotel", img: "/*Poner imagen CORESPONDIENTE*/"},
+			{ id: 4, name: "Sanji Pato", price: 5, category: "One Piece", img: "/*Poner imagen CORESPONDIENTE*/"},
+			{ id: 5, name: "Robins Stickers", price: 5, category: "DC", img: "/*Poner imagen CORESPONDIENTE*/"},
+			{ id: 6, name: "Marco Fenix", price: 10, category: "One Piece", img: "/*Poner imagen CORESPONDIENTE*/"},
+			{ id: 7, name: "Duxie", price: 5, category: "Tales of Arcadia", img: "/*Poner imagen CORESPONDIENTE*/"},
+			{ id: 8, name: "Nightwing", price: 5, category: "DC", img: "/*Poner imagen CORESPONDIENTE*/"},
+			{ id: 9, name: "Robins", price: 5, category: "DC", img: "/*Poner imagen CORESPONDIENTE*/"},
+			{ id: 10, name: "Lucifer alegre", price: 5, category: "Hazbin Hotel", img: "/*Poner imagen CORESPONDIENTE*/"},
+			{ id: 11, name: "Lucifer triste", price: 5, category: "Hazbin Hotel", img: "/*Poner imagen CORESPONDIENTE*/"},
+			{ id: 12, name: "Lucifer tierno", price: 5, category: "Hazbin Hotel", img: "/*Poner imagen CORESPONDIENTE*/"},
+			{ id: 13, name: "Mini FATSON", price: 5, category: "DC", img: "/*Poner imagen CORESPONDIENTE*/"}
         ];
 
-        /**
-         * ==========================================
-         * TEMA 2: ESTRUCTURAS DE DATOS AVANZADAS
-         * ==========================================
-         */
-        // MAP: Para el carrito. Clave: ID Producto, Valor: Cantidad.
         const cart = new Map();
 
-        // SET: Para favoritos.
         const wishlist = new Set();
 
-        /**
-         * ==========================================
-         * TEMA 3: CLOSURES (CLAUSURAS) / TEMA 4: DOM (TOAST)
-         * ==========================================
-         * Creamos una "fábrica de notificaciones".
-         */
         const createNotifier = () => {
-            // TEMA 4: SELECCIÓN DE ELEMENTO. Obtenemos la referencia al Toast por su ID.
             const toastEl = document.getElementById('toast');
             let timeoutId;
 
             return (message) => {
-                // TEMA 4: MANIPULACIÓN DE CONTENIDO. Cambiamos el texto del elemento.
                 toastEl.textContent = message;
                 
-                // TEMA 4: MANIPULACIÓN DE CLASES. Añadimos una clase para hacerlo visible (CSS Transition).
                 toastEl.classList.add('toast--visible');
                 
-                // Limpiamos timeout anterior si existe para evitar parpadeos
                 if (timeoutId) clearTimeout(timeoutId);
 
                 timeoutId = setTimeout(() => {
-                    // TEMA 4: MANIPULACIÓN DE CLASES. Quitamos la clase para ocultarlo.
                     toastEl.classList.remove('toast--visible');
                 }, 3000);
             };
         };
 
-        const notify = createNotifier(); // Instancia del closure
-
-        /**
-         * ==========================================
-         * TEMA 3: ASINCRONÍA (PROMESAS Y ASYNC/AWAIT)
-         * ==========================================
-         */
+        const notify = createNotifier(); 
+		
         const fetchProducts = () => {
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
@@ -402,58 +370,39 @@
             });
         };
 
-        /**
-         * Función principal de inicialización
-         */
+        /* Función principal de inicialización */
         async function initApp() {
             try {
                 const products = await fetchProducts();
                 
-                // TEMA 4: MANIPULACIÓN DE CLASES. Ocultamos el loader.
                 document.getElementById('loader').classList.add('hidden');
-                // TEMA 4: MANIPULACIÓN DE CLASES. Mostramos el catálogo.
                 document.getElementById('catalogo').classList.remove('hidden');
 
-                // Render inicial
                 renderCatalog(products);
                 setupFilters(products);
                 
-                // TEMA 4: MANEJO DE EVENTOS. Asignamos un evento de 'click' al botón de finalizar compra.
                 document.getElementById('btn-checkout').addEventListener('click', checkout);
 
-                // TEMA 4: MANEJO DE EVENTOS Y SELECCIÓN. Obtenemos la referencia al input de búsqueda.
                 const searchInput = document.getElementById('search-input');
-                // TEMA 4: MANEJO DE EVENTOS. Asignamos un evento 'input' para buscar en tiempo real.
                 searchInput.addEventListener('input', () => handleSearch(products));
                 
             } catch (error) {
                 console.error("Error cargando productos:", error);
-                // TEMA 4: MANIPULACIÓN DE CONTENIDO. Mostramos un mensaje de error si la carga falla.
                 document.getElementById('loader').textContent = "Error cargando el catálogo.";
             }
         }
 
-        /**
-         * ==========================================
-         * Lógica de búsqueda (Buscadores)
-         * ==========================================
-         */
+        /*Lógica de búsqueda */
         const handleSearch = (allProducts) => {
-            // TEMA 4: SELECCIÓN DE ELEMENTOS. Obtenemos el input y su valor.
             const searchInput = document.getElementById('search-input');
             const searchTerm = searchInput.value.toLowerCase().trim();
             
-            // TEMA 4: SELECCIÓN DE ELEMENTOS. Seleccionamos todos los botones de filtro.
             const filterButtons = document.querySelectorAll('.filter-btn');
 
-            // Si hay un término de búsqueda, deseleccionar visualmente los filtros para evitar conflicto
             if (searchTerm.length > 0) {
-                // TEMA 4: ITERACIÓN DEL DOM. Iteramos sobre los botones para remover la clase activa.
                 filterButtons.forEach(b => b.classList.remove('filter-btn--active'));
-                // Mantenemos 'Todos' lógicamente seleccionado si hay búsqueda.
                 document.querySelector('[data-cat="all"]').classList.add('filter-btn--active'); 
             } else {
-                 // Si se borra la búsqueda, restauramos el filtro 'Todos' visualmente
                  document.querySelector('[data-cat="all"]').classList.add('filter-btn--active'); 
             }
 
@@ -464,23 +413,12 @@
             renderCatalog(filtered);
         };
 
-
-        /**
-         * ==========================================
-         * TEMA 3: FUNCIONES FLECHA Y DE ORDEN SUPERIOR / TEMA 4: DOM (RENDER)
-         * ==========================================
-         * Renderiza el catálogo transformando datos en HTML.
-         */
         const renderCatalog = (productsList) => {
-            // TEMA 4: SELECCIÓN DE ELEMENTO. Obtenemos el contenedor donde se inyectará el HTML.
             const container = document.getElementById('catalogo');
             
-            // Usamos .map() para generar un array de strings HTML
             const cardsHtml = productsList.map(product => {
                 const isFav = wishlist.has(product.id);
-                
-                // TEMA 4: CREACIÓN DINÁMICA DE HTML (Template Literals)
-                // Se construye el HTML de cada tarjeta de producto.
+               
                 return `
                     <article class="producto">
                         <!-- TEMA 4: MANEJO DE EVENTOS INLINE. Las funciones (toggleWishlist, addToCart)
@@ -499,34 +437,20 @@
                         </div>
                     </article>
                 `;
-            }).join(''); // Unimos el array de strings en un único string HTML.
-
-            // TEMA 4: INYECCIÓN DE HTML. Usamos innerHTML para reemplazar el contenido del contenedor.
+            }).join(''); 
             container.innerHTML = cardsHtml;
         };
 
-        /**
-         * Configuración de Filtros
-         */
+        /*Filtros*/
         const setupFilters = (allProducts) => {
-            // TEMA 4: SELECCIÓN DE ELEMENTOS. Obtenemos todos los botones con la clase 'filter-btn'.
             const buttons = document.querySelectorAll('.filter-btn');
             
-            // TEMA 4: ITERACIÓN DEL DOM. Recorremos los botones para asignar el evento.
             buttons.forEach(btn => {
-                // TEMA 4: MANEJO DE EVENTOS. Asignamos un 'click' listener a cada botón.
                 btn.addEventListener('click', (e) => {
-                    // 1. Limpiar el campo de búsqueda al aplicar un filtro
-                    // TEMA 4: MANIPULACIÓN DE VALOR. Accedemos al valor del input de búsqueda.
                     document.getElementById('search-input').value = '';
-
-                    // 2. Gestión de clases visuales
-                    // TEMA 4: MANIPULACIÓN DE CLASES. Quitamos la clase activa a todos.
                     buttons.forEach(b => b.classList.remove('filter-btn--active'));
-                    // TEMA 4: MANIPULACIÓN DE CLASES. Añadimos la clase activa al botón que fue clickeado.
                     e.target.classList.add('filter-btn--active');
 
-                    // TEMA 4: ACCESO A DATA ATTRIBUTES. Leemos el atributo 'data-cat' del elemento clickeado.
                     const category = e.target.dataset.cat; 
 
                     const filtered = category === 'all' 
@@ -538,9 +462,7 @@
             });
         };
 
-        /**
-         * Lógica del Carrito (Uso de MAP)
-         */
+        /*Lógica del Carrito */
         const addToCart = (id) => {
             if (cart.has(id)) {
                 cart.set(id, cart.get(id) + 1);
@@ -571,11 +493,8 @@
             toggleCart(); 
         };
 
-        /**
-         * TEMA 4: DOM (Actualización de Carrito y Badges)
-         */
+        
         const updateCartUI = () => {
-            // TEMA 4: SELECCIÓN DE ELEMENTOS. Obtenemos referencias a contenedores y contadores.
             const container = document.getElementById('cart-items-container');
             const badge = document.getElementById('badge-cart');
             const totalEl = document.getElementById('cart-total-price');
@@ -584,13 +503,10 @@
             let totalPrice = 0;
 
             if (cart.size === 0) {
-                // TEMA 4: MANIPULACIÓN DE CONTENIDO. Se inyecta el mensaje de carrito vacío.
                 container.innerHTML = '<p style="color: #888; text-align: center; margin-top: 50px;">El carrito está vacío</p>';
-                // TEMA 4: MANIPULACIÓN DE CLASES. Ocultamos el badge si está vacío.
                 badge.classList.add('hidden');
             } else {
                 let html = '';
-                // Iteramos sobre las entradas del Map para construir el HTML del carrito
                 for (const [id, qty] of cart) {
                     const product = rawData.find(p => p.id === id);
                     totalItems += qty;
@@ -612,22 +528,16 @@
                         </div>
                     `;
                 }
-                // TEMA 4: INYECCIÓN DE HTML. Remplazamos el contenido del carrito.
                 container.innerHTML = html;
                 
-                // TEMA 4: MANIPULACIÓN DE CONTENIDO. Actualizamos el número del badge.
                 badge.textContent = totalItems;
-                // TEMA 4: MANIPULACIÓN DE CLASES. Mostramos el badge.
                 badge.classList.remove('hidden');
             }
 
-            // TEMA 4: MANIPULACIÓN DE CONTENIDO. Actualizamos el total a pagar.
             totalEl.textContent =  '$' + totalPrice.toFixed(2) ;
         };
 
-        /**
-         * Lógica de Favoritos (Uso de SET)
-         */
+         /* Lógica de Favoritos */ 
         const toggleWishlist = (id) => {
             if (wishlist.has(id)) {
                 wishlist.delete(id);
@@ -637,22 +547,18 @@
                 notify("Añadido a favoritos");
             }
             
-            // TEMA 4: SELECCIÓN DE ELEMENTO. Referencia al badge de favoritos.
             const badge = document.getElementById('badge-fav');
             
-            // TEMA 4: MANIPULACIÓN DE CONTENIDO y CLASES. Actualizamos el estado del badge.
             badge.textContent = wishlist.size; 
             if (wishlist.size > 0) badge.classList.remove('hidden');
             else badge.classList.add('hidden');
 
-            // Re-renderizar para actualizar el icono del corazón de la tarjeta
             const searchInput = document.getElementById('search-input');
             const searchTerm = searchInput.value.toLowerCase().trim();
 
             if (searchTerm) {
                 handleSearch(rawData);
             } else {
-                // TEMA 4: SELECCIÓN DE ELEMENTO. Buscamos el botón activo para mantener el filtro.
                 const activeBtn = document.querySelector('.filter-btn--active');
                 const category = activeBtn ? activeBtn.dataset.cat : 'all'; 
                 const filtered = category === 'all' ? rawData : rawData.filter(p => p.category === category);
@@ -662,13 +568,10 @@
 
         // UI Helpers
         const toggleCart = () => {
-            // TEMA 4: SELECCIÓN DE ELEMENTO. Referencia al modal.
             const cartModal = document.getElementById('cart-modal');
-            // TEMA 4: MANIPULACIÓN DE CLASES. Alternamos la clase para abrir/cerrar el modal (CSS).
             cartModal.classList.toggle('cart-modal--open');
         };
 
-        // TEMA 4: MANEJO DE EVENTOS. Asignamos el evento al botón del carrito.
         document.getElementById('btn-cart').addEventListener('click', toggleCart);
 
         // Arranque de la aplicación

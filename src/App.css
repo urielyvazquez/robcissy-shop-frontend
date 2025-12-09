@@ -1,26 +1,15 @@
 /* src/App.css */
 
-/* Este archivo se usa típicamente para estilos a nivel de componente principal.
-  Como tu diseño principal (Header, Catalog, etc.) ya está en index.css, 
-  puedes dejar esto vacío o solo agregar estilos de contenedor.
-*/
-
 .App {
-    /* Opcional: Centrar todo el contenido dentro del componente App */
     display: flex;
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
 }
 
-/* Si quieres darle estilo al 'main' de forma más directa, 
-  aunque ya lo maneja index.css: 
-*/
 main {
     width: 100%;
     max-width: 1200px;
     padding: 20px;
     box-sizing: border-box;
 }
-
-/* Puedes añadir media queries o ajustes finales aquí si es necesario */
